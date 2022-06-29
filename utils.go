@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 // getUUID returns a new UUID.
@@ -30,4 +32,15 @@ func writeData(w http.ResponseWriter, data map[string]string, code int) {
 
 	text, _ := json.Marshal(data)
 	w.Write([]byte(string(text) + "\n"))
+}
+
+// getTime returns the current time for timing functions and code blocks
+func getTime() time.Time {
+	return time.Now()
+}
+
+// endTimer logs the elapsed time of a function or code block
+func endTimer(startTime time.Time, logMessage string) {
+	elapsedTime := time.Since(startTime)
+	log.Info(logMessage, zap.Duration("elapsed", elapsedTime))
 }

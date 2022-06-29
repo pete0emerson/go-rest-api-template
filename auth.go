@@ -59,6 +59,9 @@ func basicAuthMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 
 // hasAuthentication checks if the user is authenticated by matching the user's token against what is stored in memory
 func hasAuthentication(uuid string, name string, token string) bool {
+
+	startTime := getTime()
+
 	value, okay := tokens[name]
 	if !okay {
 		log.Info("No token found",
@@ -67,7 +70,7 @@ func hasAuthentication(uuid string, name string, token string) bool {
 			zap.String("submitted_token", token),
 			zap.String("access", "denied"),
 		)
-
+		endTimer(startTime, "hasAuthorization")
 		return false
 	}
 	if token != value {
@@ -79,14 +82,18 @@ func hasAuthentication(uuid string, name string, token string) bool {
 
 			zap.String("access", "denied"),
 		)
-
+		endTimer(startTime, "hasAuthorization")
 		return false
 	}
+	endTimer(startTime, "hasAuthentication")
 	return true
 }
 
 // hasAuthorization uses Casbin to verify that the user is authorized to access the given resource
 func hasAuthorization(uuid string, name string, resource string, action string) bool {
+
+	startTime := getTime()
+
 	casbinEnforcer = casbin.NewEnforcer(viper.GetString("auth-model"), viper.GetString("auth-policy"))
 
 	if !casbinEnforcer.Enforce(name, resource, action) {
@@ -97,28 +104,36 @@ func hasAuthorization(uuid string, name string, resource string, action string) 
 			zap.String("act", action),
 			zap.String("access", "denied"),
 		)
+		endTimer(startTime, "hasAuthorization")
 		return false
 	}
+	endTimer(startTime, "hasAuthorization")
 	return true
 }
 
 // generateSecureToken generates a random secure token for the user
 func generateSecureToken(length int) string {
+	startTime := getTime()
 	b := make([]byte, length)
 	if _, err := rand.Read(b); err != nil {
 		return ""
 	}
+	endTimer(startTime, "generateSecureToken")
 	return hex.EncodeToString(b)
 }
 
 // checkUsernameAndPassword uses bcrypt to check if the username and password stored in memory are correct
 func checkUsernameAndPassword(uuid, username, password string) bool {
+
+	startTime := getTime()
+
 	// Make sure the user exists
 	if _, okay := passwords[username]; !okay {
 		log.Info("Invalid username",
 			zap.String("uuid", uuid),
 			zap.String("username", username),
 		)
+		endTimer(startTime, "checkUsernameAndPassword")
 		return false
 	}
 
@@ -129,6 +144,7 @@ func checkUsernameAndPassword(uuid, username, password string) bool {
 			zap.String("uuid", uuid),
 			zap.String("username", username),
 		)
+		endTimer(startTime, "checkUsernameAndPassword")
 		return false
 	}
 
@@ -136,5 +152,6 @@ func checkUsernameAndPassword(uuid, username, password string) bool {
 		zap.String("uuid", uuid),
 		zap.String("username", username),
 	)
+	endTimer(startTime, "checkUsernameAndPassword")
 	return true
 }

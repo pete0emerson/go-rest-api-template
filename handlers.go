@@ -2,24 +2,41 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func ResourceHandler(w http.ResponseWriter, r *http.Request) {
+
+	startTime := getTime()
+
+	uuid := getUUID()
+
+	log.Info("ResourceHandler Request",
+		zap.String("uuid", uuid),
+		zap.String("uri", r.RequestURI),
+		zap.String("method", r.Method),
+	)
+
 	data := make(map[string]string)
 	data["data"] = "Here is some data you have access to"
 	writeData(w, data, http.StatusOK)
+
+	endTimer(startTime, "ResourceHandler")
 
 }
 
 // GenerateHashHandler generates a hash of the password provided. This would never be used in production as coded below.
 func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
+
+	startTime := getTime()
+
 	uuid := getUUID()
 	data := map[string]string{}
 
-	log.Info("Request",
+	log.Info("GenerateHashHandler Request",
 		zap.String("uuid", uuid),
 		zap.String("uri", r.RequestURI),
 		zap.String("method", r.Method),
@@ -50,10 +67,15 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 	passwords[username] = string(hashedPassword)
 	writeData(w, data, http.StatusOK)
 
+	endTimer(startTime, "GenerateHashHandler")
+
 }
 
 // AuthenticateHandler authenticates the user with the provided username and password.
 func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
+
+	startTime := getTime()
+
 	uuid := getUUID()
 
 	log.Info("Request",
@@ -67,6 +89,8 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 	if !ok || !checkUsernameAndPassword(uuid, user, pass) {
 		data := map[string]string{}
 		writeData(w, data, http.StatusUnauthorized)
+		elapsedTime := time.Since(startTime)
+		log.Info("GenerateHashHandler", zap.Duration("elapsed", elapsedTime))
 		return
 	}
 
@@ -80,5 +104,7 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 		zap.String("token", data["token"]),
 	)
 	writeData(w, data, http.StatusOK)
+
+	endTimer(startTime, "AuthenticationHandler")
 
 }
