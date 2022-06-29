@@ -9,12 +9,14 @@ This template features:
 * [gorilla/mux](https://github.com/gorilla/mux) for routing
 * [go.uber.org/zap](https://pkg.go.dev/go.uber.org/zap) for logging (this is new to me, I also want to play with zerolog and some others)
 * [spf13/viper](https://github.com/spf13/viper) for configuration
+  * Server configuration can be done via file, command line, or environment variables (precidence in that order)
 * Basic auth with [golang.org/x/crypto/bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt) for password hashing
-* [casbin/casbin](https://github.com/casbin/casbin) for authorization (examples [here](https://github.com/casbin/casbin/tree/master/examples))
+* [casbin/casbin](https://github.com/casbin/casbin) for authorization
+  * Examples [here](https://github.com/casbin/casbin/tree/master/examples)
 * Functions and code blocks are timed and logged
-* Some testing of the handlers
+* Testing of the handlers
 
-The methodologies coded herein are not the only way to craft a well-formed REST API, and there is plenty of room to discuss whether
+The methodologies and patterns coded herein are not the only way to craft a well-formed REST API, and there is plenty of room to discuss whether
 it is actually "well-formed". This is just _my_ way.
 Use this as you see fit. Replace the pieces that don't work for you. Let me know if you have "better" ways of doing things.
 I'm not dogmatic about this; in fact, I'm always excited to see (other|easier|better|different) ways of doing things.
