@@ -21,6 +21,14 @@ const configFileName = "server"
 const configPaths = ".,./config"
 const tokenLength = 20
 
+type Response struct {
+	Code   string `json:"code"`
+	Data   string `json:"data"`
+	Hash   string `json:"hash"`
+	Status string `json:"status"`
+	Token  string `json:"token"`
+}
+
 var log *zap.Logger
 var casbinEnforcer *casbin.Enforcer
 var tokens map[string]string

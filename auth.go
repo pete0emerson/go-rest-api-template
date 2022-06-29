@@ -25,7 +25,7 @@ func basicAuthMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 			zap.String("method", r.Method),
 		)
 
-		data := map[string]string{}
+		data := Response{}
 
 		vars := mux.Vars(r)
 		name := vars["name"]

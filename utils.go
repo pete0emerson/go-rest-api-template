@@ -16,18 +16,18 @@ func getUUID() string {
 }
 
 // writeData writes the data object to the response writer.
-func writeData(w http.ResponseWriter, data map[string]string, code int) {
+func writeData(w http.ResponseWriter, data Response, code int) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	data["code"] = strconv.Itoa(code)
+	data.Code = strconv.Itoa(code)
 	switch code {
 	case http.StatusOK:
-		data["status"] = "OK"
+		data.Status = "OK"
 	case http.StatusForbidden:
-		data["status"] = "Forbidden"
+		data.Status = "Forbidden"
 	case http.StatusUnauthorized:
-		data["status"] = "Unauthorized"
+		data.Status = "Unauthorized"
 	}
 
 	text, _ := json.Marshal(data)

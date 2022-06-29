@@ -20,8 +20,8 @@ func ResourceHandler(w http.ResponseWriter, r *http.Request) {
 		zap.String("method", r.Method),
 	)
 
-	data := make(map[string]string)
-	data["data"] = "Here is some data you have access to"
+	data := Response{}
+	data.Data = "Here is some data you have access to"
 	writeData(w, data, http.StatusOK)
 
 	endTimer(startTime, "ResourceHandler")
@@ -34,7 +34,7 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 	startTime := getTime()
 
 	uuid := getUUID()
-	data := map[string]string{}
+	data := Response{}
 
 	log.Info("GenerateHashHandler Request",
 		zap.String("uuid", uuid),
@@ -45,7 +45,7 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 	username, password, ok := r.BasicAuth()
 	if !ok {
 		log.Info("No basic auth")
-		data["status"] = "No credentials provided"
+		data.Status = "No credentials provided"
 		writeData(w, data, http.StatusBadRequest)
 		endTimer(startTime, "GenerateHashHandler")
 		return
@@ -56,7 +56,7 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Error("Error hashing password", zap.Error(err))
 	}
-	data["hash"] = string(hashedPassword)
+	data.Hash = string(hashedPassword)
 	log.Info("Generated hash from password",
 		zap.String("uuid", uuid),
 		zap.String("user", username),
@@ -88,7 +88,7 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the username and password from the request
 	user, pass, ok := r.BasicAuth()
 	if !ok || !checkUsernameAndPassword(uuid, user, pass) {
-		data := map[string]string{}
+		data := Response{}
 		writeData(w, data, http.StatusUnauthorized)
 		elapsedTime := time.Since(startTime)
 		log.Info("GenerateHashHandler", zap.Duration("elapsed", elapsedTime))
@@ -96,13 +96,13 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate a token for the user and return it
-	data := map[string]string{}
-	data["token"] = generateSecureToken(tokenLength)
-	tokens[user] = data["token"]
+	data := Response{}
+	data.Token = generateSecureToken(tokenLength)
+	tokens[user] = data.Token
 	log.Info("Authentication granted",
 		zap.String("uuid", uuid),
 		zap.String("user", user),
-		zap.String("token", data["token"]),
+		zap.String("token", data.Token),
 	)
 	writeData(w, data, http.StatusOK)
 

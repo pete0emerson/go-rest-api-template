@@ -10,13 +10,6 @@ import (
 	"gotest.tools/assert"
 )
 
-type Response struct {
-	Code   string `json:"code"`
-	Data   string `json:"data"`
-	Status string `json:"status"`
-	Hash   string `json:"hash"`
-}
-
 func getData(text []byte) Response {
 	data := Response{}
 	json.Unmarshal(text, &data)
