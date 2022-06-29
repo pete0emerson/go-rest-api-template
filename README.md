@@ -9,6 +9,7 @@ This template uses:
 * [gorilla/mux](https://github.com/gorilla/mux) for routing
 * [go.uber.org/zap](https://pkg.go.dev/go.uber.org/zap) for logging (this is new to me, I also want to play with zerolog and some others)
 * [spf13/viper](https://github.com/spf13/viper) for configuration
+* Basic auth with [golang.org/x/crypto/bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt) for password hashing
 * [casbin/casbin](https://github.com/casbin/casbin) for authorization (examples [here](https://github.com/casbin/casbin/tree/master/examples))
 
 The methodologies coded herein are not the only way to craft a well-formed REST API, and there is plenty of room to discuss whether
