@@ -12,7 +12,7 @@ curl -s -q -u ${USER}:${PASS} localhost:8000/generate
 echo
 
 echo "## Getting a token from the server"
-token=$(curl -s -q -u ${USER}:${PASS} localhost:8000/auth | cut -d , -f 3 | cut -d : -f 2 | sed 's/["}]//g')
+token=$(curl -s -q -u ${USER}:${PASS} localhost:8000/auth | sed 's/^.*token":"//' | sed 's/"}.*$//')
 echo "## Got a token from the server"
 if [[ "$token" == "null" ]] ; then
 	echo "## Not authorized. Quitting."

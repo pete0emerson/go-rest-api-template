@@ -54,7 +54,7 @@ curl -s -q -u ${USER}:${PASS} localhost:8000/generate
 Get a token from the server:
 
 ```
-token=$(curl -s -q -u ${USER}:${PASS} localhost:8000/auth | cut -d , -f 3 | cut -d : -f 2 | sed 's/["}]//g')
+token=$(curl -s -q -u ${USER}:${PASS} localhost:8000/auth | sed 's/^.*token":"//' | sed 's/"}.*$//')
 ```
 
 Use the token to request "data":
