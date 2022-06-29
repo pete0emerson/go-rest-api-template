@@ -10,7 +10,7 @@ This template features:
 * [go.uber.org/zap](https://pkg.go.dev/go.uber.org/zap) for logging (this is new to me, I also want to play with zerolog and some others)
 * [spf13/viper](https://github.com/spf13/viper) for configuration
   * Server configuration can be done via file, command line, or environment variables (precidence in that order)
-* Basic auth with [golang.org/x/crypto/bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt) for password hashing
+* Basic authentication with [golang.org/x/crypto/bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt) for password hashing
 * [casbin/casbin](https://github.com/casbin/casbin) for authorization
   * Examples [here](https://github.com/casbin/casbin/tree/master/examples)
 * Functions and code blocks are timed and logged
