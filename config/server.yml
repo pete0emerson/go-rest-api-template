@@ -1,0 +1,11 @@
+# The values listed are the defaults build into the code base. If this file is missing and no environment variables are set, then the defaults set
+# in the code will apply. See https://github.com/spf13/viper for details about precidence of configuration values
+# * explicit call to Set
+# * flag
+# * env
+# * config
+# * key/value store
+# * default
+---
+address: 127.0.0.1 # This is the default value
+port: 8000 # This is the default value
