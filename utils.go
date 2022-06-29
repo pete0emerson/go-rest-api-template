@@ -8,10 +8,12 @@ import (
 	"github.com/google/uuid"
 )
 
+// getUUID returns a new UUID.
 func getUUID() string {
 	return uuid.New().String()[:8]
 }
 
+// writeData writes the data object to the response writer.
 func writeData(w http.ResponseWriter, data map[string]string, code int) {
 
 	w.Header().Set("Content-Type", "application/json")

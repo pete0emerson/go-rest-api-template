@@ -12,6 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// basicAuthMiddleware makes sure that the user is authenticated and authorized to access the resource
 func basicAuthMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -56,6 +57,7 @@ func basicAuthMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// hasAuthentication checks if the user is authenticated by matching the user's token against what is stored in memory
 func hasAuthentication(uuid string, name string, token string) bool {
 	value, okay := tokens[name]
 	if !okay {
@@ -83,6 +85,7 @@ func hasAuthentication(uuid string, name string, token string) bool {
 	return true
 }
 
+// hasAuthorization uses Casbin to verify that the user is authorized to access the given resource
 func hasAuthorization(uuid string, name string, resource string, action string) bool {
 	casbinEnforcer = casbin.NewEnforcer(viper.GetString("auth-model"), viper.GetString("auth-policy"))
 
@@ -99,6 +102,7 @@ func hasAuthorization(uuid string, name string, resource string, action string) 
 	return true
 }
 
+// generateSecureToken generates a random secure token for the user
 func generateSecureToken(length int) string {
 	b := make([]byte, length)
 	if _, err := rand.Read(b); err != nil {
@@ -107,6 +111,7 @@ func generateSecureToken(length int) string {
 	return hex.EncodeToString(b)
 }
 
+// checkUsernameAndPassword uses bcrypt to check if the username and password stored in memory are correct
 func checkUsernameAndPassword(uuid, username, password string) bool {
 	// Make sure the user exists
 	if _, okay := passwords[username]; !okay {
@@ -116,6 +121,7 @@ func checkUsernameAndPassword(uuid, username, password string) bool {
 		)
 		return false
 	}
+
 	// Hash the password and compare to what is stored
 	err := bcrypt.CompareHashAndPassword([]byte(passwords[username]), []byte(password))
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// init initializes the application prior to running.
 func init() {
 	// Setup logging
 	log, _ = zap.NewProduction()

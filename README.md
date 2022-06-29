@@ -67,5 +67,4 @@ curl -H "Content-type: application/json" -H "Token:$token" localhost:8000/data/$
 ## TODO
 
 - [ ] Add timing
-- [ ] Add comments on all functions and key code snippets
 - [ ] Add tests

@@ -14,6 +14,7 @@ func ResourceHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// GenerateHashHandler generates a hash of the password provided. This would never be used in production as coded below.
 func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 	uuid := getUUID()
 	data := map[string]string{}
@@ -23,7 +24,7 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 		zap.String("uri", r.RequestURI),
 		zap.String("method", r.Method),
 	)
-
+	// Get the username and password from the request
 	username, password, ok := r.BasicAuth()
 	if !ok {
 		log.Error("No basic auth")
@@ -32,6 +33,7 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Generate a hash of the password. We never want to store raw passwords.
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Error("Error hashing password", zap.Error(err))
@@ -42,15 +44,15 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 		zap.String("user", username),
 		zap.String("hash", string(hashedPassword)),
 	)
-	// We'll store the first password generated for the user
-	if len(passwords) == 0 {
-		log.Info("Stored first password hash for user", zap.String("user", username), zap.String("hash", string(hashedPassword)))
-		passwords[username] = string(hashedPassword)
-	}
+
+	// This allows anyone to store a password. Obviously not secure, this is only for demo purposes.
+	log.Info("Stored first password hash for user", zap.String("user", username), zap.String("hash", string(hashedPassword)))
+	passwords[username] = string(hashedPassword)
 	writeData(w, data, http.StatusOK)
 
 }
 
+// AuthenticateHandler authenticates the user with the provided username and password.
 func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 	uuid := getUUID()
 
@@ -60,6 +62,7 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 		zap.String("method", r.Method),
 	)
 
+	// Get the username and password from the request
 	user, pass, ok := r.BasicAuth()
 	if !ok || !checkUsernameAndPassword(uuid, user, pass) {
 		data := map[string]string{}
@@ -67,6 +70,7 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Generate a token for the user and return it
 	data := map[string]string{}
 	data["token"] = generateSecureToken(tokenLength)
 	tokens[user] = data["token"]

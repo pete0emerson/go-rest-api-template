@@ -28,12 +28,14 @@ var passwords map[string]string
 
 func main() {
 
+	// The router definitions and mapping to the handlers
 	r := mux.NewRouter()
 	r.HandleFunc("/generate", GenerateHashHandler)
 	r.HandleFunc("/auth", AuthenticationHandler).Methods("GET")
 	r.Handle("/{resource}/{name}", basicAuthMiddleware(http.HandlerFunc(ResourceHandler))).Methods("GET")
 	http.Handle("/", r)
 
+	// Configure the server parameters
 	httpAddress := viper.GetString("address") + ":" + viper.GetString("port")
 
 	srv := &http.Server{
@@ -43,6 +45,7 @@ func main() {
 		ReadTimeout:  readTimeout * time.Second,
 	}
 
+	// Fire up the server
 	log.Info("Starting server", zap.String("address", httpAddress))
 	err := srv.ListenAndServe()
 	if err != nil {
