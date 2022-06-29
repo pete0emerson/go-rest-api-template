@@ -44,9 +44,10 @@ func GenerateHashHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the username and password from the request
 	username, password, ok := r.BasicAuth()
 	if !ok {
-		log.Error("No basic auth")
+		log.Info("No basic auth")
 		data["error"] = "No credentials provided"
 		writeData(w, data, http.StatusBadRequest)
+		endTimer(startTime, "GenerateHashHandler")
 		return
 	}
 

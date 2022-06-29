@@ -64,6 +64,16 @@ Use the token to request "data":
 curl -H "Content-type: application/json" -H "Token:$token" localhost:8000/data/${USER}
 ```
 
-## TODO
+## Testing
 
-- [ ] Add tests
+Run all of the tests:
+
+```
+go test
+```
+
+Run a single test:
+
+```
+go test -run TestResourceHandler
+```
