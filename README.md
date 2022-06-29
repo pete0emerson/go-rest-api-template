@@ -66,6 +66,12 @@ curl -H "Content-type: application/json" -H "Token:$token" localhost:8000/data/$
 
 ## Testing
 
+In order to test properly, the `config/policy.csv` file must contain:
+
+```
+p, demo, data, read
+```
+
 Run all of the tests:
 
 ```
