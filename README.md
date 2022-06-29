@@ -20,7 +20,7 @@ this template in the future as I learn more and as new modules become available.
 
 ## Quick Start
 
-You must have `go`, `curl`, and `jq` installed to fully run the demo. 
+You must have `go` and `curl` installed to fully run the demo. 
 
 Build the binary:
 
@@ -48,14 +48,15 @@ echo "p, ${USER}, data, read" > ./config/policy.csv
 Generate and store a password hash (the server will cache the hash):
 
 ```
-hash=$(curl -s -q -u ${USER}:${PASS} localhost:8000/generate | jq -r '.hash')
+curl -s -q -u ${USER}:${PASS} localhost:8000/generate
 ```
 
 Get a token from the server:
 
 ```
-token=$(curl -s -q -u ${USER}:${PASS} localhost:8000/auth | jq -r '.token')
+token=$(curl -s -q -u ${USER}:${PASS} localhost:8000/auth | cut -d , -f 3 | cut -d : -f 2 | sed 's/["}]//g')
 ```
+
 Use the token to request "data":
 
 ```
