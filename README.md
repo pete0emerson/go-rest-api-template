@@ -7,7 +7,7 @@ This is my template for a well formed REST API in Golang.
 This template uses:
 
 * [gorilla/mux](https://github.com/gorilla/mux) for routing
-* [sirupsen/logrus](https://github.com/Sirupsen/logrus) for logging
+* [go.uber.org/zap](https://pkg.go.dev/go.uber.org/zap) for logging (this is new to me, I also want to play with zerolog and some others)
 * [spf13/viper](https://github.com/spf13/viper) for configuration
 * [casbin/casbin](https://github.com/casbin/casbin) for authorization (examples [here](https://github.com/casbin/casbin/tree/master/examples))
 
