@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is my template for a well formed REST API in Golang.
+This is my template for a well formed REST API in Go.
 
 This template features:
 
@@ -87,3 +87,7 @@ Run a single test:
 ```
 go test -run TestResourceHandler
 ```
+
+## See Also
+
+* [pete0emerson/go-cli-template](https://github.com/pete0emerson/go-cli-template) is a similar project for a well-formed CLI in Go.
