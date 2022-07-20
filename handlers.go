@@ -1,9 +1,14 @@
 package main
 
 import (
+	"context"
+	"crypto/tls"
+	"fmt"
 	"net/http"
 	"time"
 
+	"github.com/go-redis/redis/v8"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -107,5 +112,78 @@ func AuthenticationHandler(w http.ResponseWriter, r *http.Request) {
 	writeData(w, data, http.StatusOK)
 
 	endTimer(startTime, "AuthenticationHandler")
+
+}
+
+func RedisHandler(w http.ResponseWriter, r *http.Request) {
+
+	const redisCacheExpire = time.Second * 60 * 60 * 24
+
+	startTime := getTime()
+
+	uuid := getUUID()
+
+	log.Info("RedisHandler Request",
+		zap.String("uuid", uuid),
+		zap.String("uri", r.RequestURI),
+		zap.String("method", r.Method),
+	)
+
+	var ctx = context.Background()
+
+	redisAddress := viper.GetString("redis-address")
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     redisAddress,
+		Password: "",
+		DB:       0,
+		TLSConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
+	})
+	// Need to capture the error and deal with it appropriately.
+	val, err := rdb.Incr(ctx, "foo").Result()
+
+	data := Response{}
+
+	if err != nil {
+		log.Error("Error incrementing redis", zap.Error(err), zap.String("redis-address", redisAddress))
+		data.Message = "Error incrementing counter"
+		data.Code = http.StatusInternalServerError
+		writeData(w, data, http.StatusInternalServerError)
+		endTimer(startTime, "RedisHandler")
+		return
+	}
+
+	rdb.ExpireNX(ctx, "foo", redisCacheExpire)
+
+	data.Data = fmt.Sprintf("The counter is %d", val)
+	data.Code = http.StatusOK
+	writeData(w, data, http.StatusOK)
+
+	endTimer(startTime, "RedisHandler")
+
+}
+
+func VersionHandler(w http.ResponseWriter, r *http.Request) {
+
+	startTime := getTime()
+
+	uuid := getUUID()
+
+	log.Info("VersionHandler Request",
+		zap.String("uuid", uuid),
+		zap.String("uri", r.RequestURI),
+		zap.String("method", r.Method),
+	)
+
+	data := Response{}
+	log.Sugar().Infof("Version: %s", buildVersion)
+	data.BuildVersion = buildVersion
+	data.BuildDate = buildDate
+	data.Code = http.StatusOK
+	writeData(w, data, http.StatusOK)
+
+	endTimer(startTime, "VersionHandler")
 
 }

@@ -1,0 +1,33 @@
+---
+services:
+  redis:
+    build: redis
+    container_name: redis
+    volumes:
+      - "./redis/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "./redis/tls/redis.crt:/usr/local/etc/redis/redis.crt"
+      - "./redis/tls/redis.key:/usr/local/etc/redis/redis.key"
+      - "./redis/tls/ca.crt:/usr/local/etc/redis/ca.crt"
+  api:
+    build:
+      context: .
+      args:
+        BUILD_DATE: "${BUILD_DATE}"
+        BUILD_VERSION: "${BUILD_VERSION}"
+    container_name: api
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    volumes:
+      - "./config/server.yml:/app/config/server.yml"
+      - "./config/model.conf:/app/config/model.conf"
+      - "./config/policy.csv:/app/config/policy.csv:rw"
+    environment:
+      - SERVER_ADDRESS=0.0.0.0
+      - SERVER_PORT=8000
+      - SERVER_AUTH_MODEL=/app/config/model.conf
+      - SERVER_AUTH_POLICY=/app/config/policy.csv
+      - SERVER_REDIS_ADDRESS=redis:7379

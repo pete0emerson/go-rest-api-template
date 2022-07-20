@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,7 +19,7 @@ func writeData(w http.ResponseWriter, data Response, code int) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	data.Code = strconv.Itoa(code)
+	data.Code = code
 	switch code {
 	case http.StatusOK:
 		data.Status = "OK"

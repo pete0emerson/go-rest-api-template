@@ -10,6 +10,7 @@ import (
 
 // init initializes the application prior to running.
 func init() {
+
 	// Setup logging
 	log, _ = zap.NewProduction()
 	defer log.Sync()
@@ -19,12 +20,15 @@ func init() {
 	pflag.String("address", defaultAddress, "The address to listen on")
 	pflag.String("auth-model", "./config/model.conf", "The path to the auth model file")
 	pflag.String("auth-policy", "./config/policy.csv", "The path to the auth policy file")
+	pflag.String("redis-address", "localhost:6379", "The address of the redis server")
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 
 	// Set the environment prefix for incoming variables
 	viper.SetEnvPrefix(envPrefix)
 	viper.AutomaticEnv()
+	replacer := strings.NewReplacer("-", "_")
+	viper.SetEnvKeyReplacer(replacer)
 
 	// Set the configuration file name
 	viper.SetConfigName(configFileName)
