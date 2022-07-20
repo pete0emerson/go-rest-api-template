@@ -1,8 +1,5 @@
 SHELL := /bin/bash # Use bash syntax
 
-test:
-	echo "Today is $$DATE"
-
 build:	vendor tls
 build:
 	BUILD_DATE=$$(date -u '+%Y-%m-%d %H:%M:%S UTC') BUILD_VERSION=$(VERSION) docker-compose build
