@@ -91,3 +91,17 @@ go test -run TestResourceHandler
 ## See Also
 
 * [pete0emerson/go-cli-template](https://github.com/pete0emerson/go-cli-template) is a similar project for a well-formed CLI in Go.
+
+## Future improvements
+
+* `/metrics` endpoint exposing metrics for ingestion into something like Prometheus
+* `/ready` endpoint for a load balancer to check
+* `/serve` authenticated POST endpoint to set desired serving state (to remove from load balancer even if the server is healthy)
+* `/version` endpoint
+* Build scripts (`Makefile`? `/scripts/foo.sh`?)
+* Use `docker-compose` to build a working local environment
+  * App
+  * Prometheus
+  * Grafana
+  * Persistence layer
+  * Caching layer
