@@ -3,6 +3,7 @@ package main
 import (
 	"strings"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -10,6 +11,10 @@ import (
 
 // init initializes the application prior to running.
 func init() {
+
+	prometheus.Register(totalRequests)
+	prometheus.Register(responseStatus)
+	prometheus.Register(httpDuration)
 
 	// Setup logging
 	log, _ = zap.NewProduction()

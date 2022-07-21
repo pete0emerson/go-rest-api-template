@@ -18,9 +18,7 @@ services:
     depends_on:
       - redis
     ports:
-      - "8000:8000"
-    expose:
-      - 8000
+      - 8000:8000
     volumes:
       - "./config/server.yml:/app/config/server.yml"
       - "./config/model.conf:/app/config/model.conf"
@@ -31,3 +29,14 @@ services:
       - SERVER_AUTH_MODEL=/app/config/model.conf
       - SERVER_AUTH_POLICY=/app/config/policy.csv
       - SERVER_REDIS_ADDRESS=redis:7379
+  prometheus:
+    image: prom/prometheus:v2.37.0
+    ports:
+      - 9000:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
+volumes:
+  prometheus-data:
