@@ -1,4 +1,5 @@
 SHELL := /bin/bash # Use bash syntax
+VERSION ?= v0.0.0
 
 build:	vendor tls
 build:
@@ -9,7 +10,7 @@ help:   	## Show this help
 
 build:		## Build the application stack
 
-start:		## Start the application stack
+run:		## Start the application stack
 	docker-compose up -d
 
 tail:		## Tail the logs
