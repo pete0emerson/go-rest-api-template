@@ -94,14 +94,16 @@ go test -run TestResourceHandler
 
 ## Future improvements
 
-* `/metrics` endpoint exposing metrics for ingestion into something like Prometheus
+* ✅ `/metrics` endpoint exposing metrics for ingestion into something like Prometheus
 * `/ready` endpoint for a load balancer to check
 * `/serve` authenticated POST endpoint to set desired serving state (to remove from load balancer even if the server is healthy)
 * `/version` endpoint
-* Build scripts (`Makefile`? `/scripts/foo.sh`?)
+* ✅ Build scripts (`Makefile`? `/scripts/foo.sh`?)
 * Use `docker-compose` to build a working local environment
-  * App
-  * Prometheus
+  * ✅ App
+  * ✅ Prometheus
   * Grafana
-  * Persistence layer
+  * ✅ Redis
   * Caching layer
+* Minikube deployment
+* Homebrew packaging
