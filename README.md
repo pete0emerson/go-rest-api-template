@@ -107,3 +107,4 @@ go test -run TestResourceHandler
   * Caching layer
 * Minikube deployment
 * Homebrew packaging
+* Tie Casbin to Redis with [an adapter](https://github.com/mlsen/casbin-redis-adapter) for persistence instead of files
